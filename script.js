@@ -99,7 +99,7 @@ render();
 function startGame() {
   intervalId = setInterval(() => {
     render();
-  }, 400);
+  }, 200);
 }
 startButton.addEventListener("click", () => {
   startGameModal.style.display  = "none";
@@ -132,7 +132,7 @@ restartButton.addEventListener("click", () => {
 //   gameOverModal.style.display = "none";
   intervalId = setInterval(() => {
     render();
-  }, 400);
+  }, 200);
 });
 addEventListener("keydown", (e) => {
   if (e.key == "ArrowLeft" && direction !== "right") {
