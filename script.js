@@ -150,37 +150,79 @@ addEventListener("keydown", (e) => {
   }
 });
 
-let touchStartX = 0;
-let touchStartY = 0;
+/* ---------- MOBILE CONTROLS (INSERTED CODE) ---------- */
 
-board.addEventListener("touchstart", function (e) {
-  const touch = e.touches[0];
-  touchStartX = touch.clientX;
-  touchStartY = touch.clientY;
-}, { passive: true });
+// Create control container
+const controls = document.createElement("div");
+controls.className = "mobile-controls";
 
-board.addEventListener("touchend", function (e) {
-  const touch = e.changedTouches[0];
-  let touchEndX = touch.clientX;
-  let touchEndY = touch.clientY;
+// Create buttons
+controls.innerHTML = `
+  <button class="ctrl up">▲</button>
+  <div class="middle">
+    <button class="ctrl left">◀</button>
+    <button class="ctrl right">▶</button>
+  </div>
+  <button class="ctrl down">▼</button>
+`;
 
-  let dx = touchEndX - touchStartX;
-  let dy = touchEndY - touchStartY;
+document.body.appendChild(controls);
 
-  // Detect swipe direction
-  if (Math.abs(dx) > Math.abs(dy)) {
-    // Horizontal swipe
-    if (dx > 30 && direction !== "left") {
-      direction = "right";
-    } else if (dx < -30 && direction !== "right") {
-      direction = "left";
-    }
-  } else {
-    // Vertical swipe
-    if (dy > 30 && direction !== "up") {
-      direction = "down";
-    } else if (dy < -30 && direction !== "down") {
-      direction = "up";
-    }
-  }
+// Button logic
+controls.querySelector(".up").addEventListener("click", () => {
+  if (direction !== "down") direction = "up";
 });
+controls.querySelector(".down").addEventListener("click", () => {
+  if (direction !== "up") direction = "down";
+});
+controls.querySelector(".left").addEventListener("click", () => {
+  if (direction !== "right") direction = "left";
+});
+controls.querySelector(".right").addEventListener("click", () => {
+  if (direction !== "left") direction = "right";
+});
+
+/* ---------- STYLE INJECTION ---------- */
+const style = document.createElement("style");
+style.innerHTML = `
+.mobile-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+}
+
+.mobile-controls .middle {
+  display: flex;
+  gap: 40px;
+}
+
+.ctrl {
+  width: 60px;
+  height: 60px;
+  font-size: 22px;
+  font-weight: bold;
+  border-radius: 50%;
+  border: none;
+  background: #222;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.ctrl:active {
+  transform: scale(0.9);
+  background: #444;
+}
+
+@media (min-width: 768px) {
+  .mobile-controls {
+    display: none;
+  }
+}
+`;
+document.head.appendChild(style);
